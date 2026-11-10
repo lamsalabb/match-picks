@@ -1,48 +1,42 @@
-# Football Betting App
+# Match Picks
 
-A full-stack football betting web application built with **Java 21** and **Spring Boot 3.4**. The application allows users to authenticate, view football match information, and place simulated bets using a persistent MySQL-backed system.
-
----
+A football score-prediction game built with Spring Boot. Users sign up, predict the exact score of upcoming fixtures by staking virtual coins, and get double their stake back when the prediction is right. No real money is involved.
 
 ## Features
 
-* **User Authentication:** Secure registration, login, and access control managed via Spring Security.
-* **Match & Score Management:** View upcoming matches, actual scores, and match metadata.
-* **Simulated Betting System:** Place bets using virtual currency (coins) with automated payout processing.
-* **Data Persistence:** Robust user, match, and betting data management powered by MySQL and Spring Data JPA.
-* **Server-Side Rendering:** Interactive UI views rendered via Thymeleaf templates.
-* **Email Notifications:** Email service integration powered by Spring Mail.
+- Registration with email OTP verification and form login (Spring Security)
+- Role-based access for `USER` and `ADMIN`, backed by users and roles stored in MySQL
+- Upcoming fixtures for the current matchday pulled from an external football data API
+- Place a score prediction on a fixture and review your prediction history
+- Automatic settlement: predictions are checked and coins paid out after the match ends
+- Admin pages to list and update users
+- League standings page
 
----
+## Tech stack
 
-## Tech Stack
+Java 21, Spring Boot 3.4, Spring MVC, Spring Security 6, Spring Data JPA (Hibernate), Thymeleaf, MySQL, Maven
 
-* **Language:** Java 21
-* **Framework:** Spring Boot 3.4.4
-* **Web Layer:** Spring MVC, Thymeleaf
-* **Security:** Spring Security
-* **Database:** MySQL
-* **Persistence:** Spring Data JPA / Hibernate
-* **Build Tool:** Maven
-* **Testing:** Spring Boot Test, Spring Security Test
+## Project layout
 
----
+```
+src/main/java/.../footballapp
+  config/       security configuration
+  controller/   MVC controllers (home, predictions, admin, login, users)
+  entity/       JPA entities (User, Role, Bet)
+  repository/   Spring Data repositories
+  service/      prediction settlement, users, email OTP
+src/main/resources/templates   Thymeleaf views
+sql-scripts/                   database and table setup
+```
 
-## Architecture
+## Run locally
 
-The application follows a standard layered Spring Boot architecture:
+1. Create the database and tables with the scripts in `sql-scripts/`.
+2. Set your own datasource and mail credentials in `src/main/resources/application.properties` (or pass them as environment variables). Do not commit real credentials.
+3. Start the app:
 
-```text
-Web Browser
-    │
-    ▼
-Controllers  ──► (Renders Thymeleaf Templates)
-    │
-    ▼
- Services    ──► (Business & Payout Logic)
-    │
-    ▼
-Repositories ──► (Spring Data JPA)
-    │
-    ▼
-MySQL Database
+```
+./mvnw spring-boot:run
+```
+
+4. Open http://localhost:8080
